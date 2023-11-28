@@ -1,9 +1,21 @@
 const { schema, model } = require("mongoose");
+const handleMongooseError = require("../helpers");
 
 const userSchema = new Schema({
-  email: string,
-  password: string,
+  password: {
+    type: String,
+    required: [true, "Set password for user"],
+  },
+
+  email: {
+    type: String,
+    required: [true, "Email is required"],
+    unique: true,
+  },
 });
 
+userSchema.post("save", handleMongooseError);
+
 const User = model("user", userSchema);
-module.exports = User;
+
+module.exports = { User };
